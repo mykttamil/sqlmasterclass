@@ -1,0 +1,283 @@
+---- SQL MASTER CLASS QUERY REFERENCE Created on 22-June-2021 
+
+--CREATE TABLE
+
+--- CREATE TABLE QUERY
+
+CREATE TABLE public.student
+(
+    stud_id integer NOT NULL,
+    first_name character varying(50) COLLATE pg_catalog."default",
+    last_name character varying(50) COLLATE pg_catalog."default",
+    address1 character varying(50) COLLATE pg_catalog."default",
+    address2 character varying(50) COLLATE pg_catalog."default",
+    address3 character varying(50) COLLATE pg_catalog."default",
+    country character varying(50) COLLATE pg_catalog."default",
+    age integer,
+    email_address character varying(50) COLLATE pg_catalog."default",
+    course_name character varying(50) COLLATE pg_catalog."default",
+    CONSTRAINT student_pkey PRIMARY KEY (stud_id)
+)
+
+
+
+CREATE TABLE public.teacher
+(
+    teach_id integer NOT NULL,
+    first_name character varying(50) COLLATE pg_catalog."default",
+    last_name character varying(50) COLLATE pg_catalog."default",
+    address1 character varying(50) COLLATE pg_catalog."default",
+    address2 character varying(50) COLLATE pg_catalog."default",
+    address3 character varying(50) COLLATE pg_catalog."default",
+    country character varying(50) COLLATE pg_catalog."default",
+    age integer,
+    course character varying(50) COLLATE pg_catalog."default",
+    specialization character varying(50) COLLATE pg_catalog."default",
+    email_address character varying(50) COLLATE pg_catalog."default",
+    CONSTRAINT teacher_pkey PRIMARY KEY (teach_id)
+)
+
+
+--- WHERE IN BETWEEN
+
+select * from film
+where rental_duration in ('5', '6', '7')  -- 594 rows
+
+select count(1) from film where rental_duration in ('3', '4') -- 406 rows
+
+select count(1) from film where rental_duration in ('15') -- same 406 rows after update
+
+update film 
+set rental_duration = '15'
+where rental_duration in ('3', '4');
+
+-- WHERE, IN, BETWEEN CONDITION CAN BE USED SELECT, INSERT, UPDATE
+
+select * from film
+where rental_duration not in ('5', '6', '7')  -- 406 rows
+
+select * from film
+where rental_duration between '5' and '7' -- 594 records
+
+select * from film
+where last_update between '2013-05-01' and '2013-05-30'   --- 934 43cords
+
+select * from film
+where last_update between '2013-05-26' and '2013-05-27' -- 934 records
+
+
+
+select * from film
+
+delete from film
+where title = 'African Egg'
+
+
+select * from film_actor
+where film_id = '5'
+
+delete from film_actor
+where film_id = '5'
+
+
+select * from film_category
+where film_id = '5'
+
+delete from film_category
+where film_id = '5'
+
+
+select * from inventory
+where film_id = '5'
+
+
+delete from inventory
+where film_id = '5'
+
+
+
+--- LIMIT, IN, UNION
+select customer_id from customer
+limit 20;
+
+
+select * from payment where customer_id in 
+(select customer_id from customer
+limit 20)
+
+
+select payment_id, amount, (select first_name from customer where customer_id = pymt.customer_id) 
+from payment pymt 
+
+
+
+select * from customer limit 20;
+
+select * from payment 
+where customer_id in (select customer_id from customer limit 20)
+
+
+select (select first_name from customer where customer_id = pymt.customer_id) as "Name", 
+payment_id, amount from payment pymt
+
+
+
+
+select customer_id from customer_except
+except
+select customer_id from payment_except
+
+
+select customer_id from customer_union
+union all
+select  customer_id from payment_union
+union all 
+select distinct customer_id from payment limit 500;
+
+
+
+
+-- SUM, INDEX, MAX, UPPER, LOWER
+select * from customer_base
+
+create index customerbase_fk_address_id on customer_base using btree
+(address_id ASC nulls LAST)
+tablespace pg_default;
+
+
+select sum(address_id) from customer_base
+
+alter index customerbase_fk_address_id rename to customerbase_fk_add_id;
+
+drop index customerbase_fk_add_id;
+
+select * from customer
+
+select first_name, length(first_name) from customer;
+
+select max(length(first_name)) from customer;
+
+select min(length(first_name)) from customer;
+
+select first_name, upper(first_name) from customer where active = 1;
+
+
+select first_name, lower(first_name) from customer where active = 1;
+
+
+select * from country
+
+select * from city
+
+select c.city, replace(cty.country, 'India', 'IN') from city c, country cty 
+where c.country_id = cty.country_id
+and cty.country = 'India'
+
+
+
+/* TRIM */
+select trim (leading '  ' from  '     Mykttamil     ');
+select trim (trailing '  ' from  '     Mykttamil     ');
+
+select trim (both '  ' from  '     Mykttamil     ');
+
+select ltrim ('     Mykttamil     ');
+select rtrim ('     Mykttamil     ');
+
+/*SUBSTRING */
+
+select * from customer_base
+
+select email , substring(email, 5, 10) from customer_base
+
+select first_name, last_name, substring(first_name for 1) || substring(last_name for 1) 
+from customer_base
+
+
+/*concatenation */
+
+select first_name, last_name, substring(first_name for 1) || substring(last_name for 1) 
+from customer_base
+
+
+select first_name || ' ' || last_name 
+from customer_base
+
+/* List aggregation */
+
+select * from film
+
+select rental_duration, string_agg(title, ', ') from film
+group by rental_duration;
+
+/*CEIL FLOOR */
+
+select amount, ceil(amount), floor(amount) from payment
+
+/* SETSEED & RANDOM random a=10 b=100 */
+
+
+select setseed(0.5);
+select random();
+
+
+select setseed(0.5);
+select random();
+
+
+select setseed(0.5);
+select random();
+
+
+/* ROUND */
+select amount, round(amount), floor(amount) from payment
+
+/* POWER */
+
+select power(address_id,2), address_id from customer order by address_id asc
+
+
+
+
+/* DATE TIME */
+
+select current_date, current_time, current_time(1), current_time(2), current_timstamp;
+
+
+select create_date, last_update, age(last_update, create_date) from customer
+
+
+/* SQL JOINS */
+select * from morning_batch
+
+
+select * from evening_batch
+
+
+select a.name, a.course, b.name, b.course
+from morning_batch as a inner join evening_batch as b
+on a.name = b.name
+
+
+select a.name, a.course, b.name, b.course
+from morning_batch as a left join evening_batch as b
+on a.name = b.name
+
+select a.name, a.course, b.name, b.course
+from morning_batch as a right join evening_batch as b
+on a.name = b.name
+
+
+select a.name, a.course, b.name, b.course
+from morning_batch as a full join evening_batch as b
+on a.name = b.name
+
+
+select * from actor
+order by last_update desc
+
+select * from film
+order by last_update asc
+
+select * from film
+order by last_update asc, rental_duration desc
