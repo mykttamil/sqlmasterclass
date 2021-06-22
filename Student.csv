@@ -1,0 +1,16 @@
+﻿Stud_Id,First_Name,Last_Name,Address1,Address2,Address3,Country,Age,Email_Add,Course_Name
+20001,Ram,Kumar,,,Chennai,India,22,,Java
+20002,Nivan,Dev,,,Vellore,India,25,,Big_Data
+20003,Raman,Kanth,,,Trichy,India,18,,Python
+20004,Nivitha,Raj,,,Kovai,India,17,,SQL
+20005,Suman,Kumar,,Arakkonam,Ranipet,India,20,,SQL
+20006,Mohan,Rehan,,,Kanniyakumari,India,22,,Big_Data
+20007,Rajan,Kumar,,,Madurai,India,21,,Python
+20008,Logesh,Dev,New Street,Avadi,Chennai,India,25,,Oracle
+20009,Priya,Kumari,,,Avadi,India,24,,SQL
+20010,Mrnalini,Mishra,,,Arakkonam,India,18,,Big_Data
+20011,Kumar,Shah,,,Bangalore,India,19,,Python
+20012,Riji,Menon,,,Mumbai,India,22,,Data_Science
+20013,Sree,Kumar,,,Delhi,India,20,,SQL
+20014,Dinesh,Kumar,,,Kolkata,India,21,,Big_Data
+20015,Prabu,Raj,,,Vellore,India,22,,Python
